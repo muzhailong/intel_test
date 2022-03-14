@@ -23,6 +23,6 @@ Reference: https://computing.llnl.gov/tutorials/openMP/
 <p>然后,直接执行./test进行单元测试,或者直接执行./main执行example</p>
 
 ## Performance
-在Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz   2.00 GHz，16G memory，WSL下进行测试
+在Intel(R) Core(TM) i7-8550U CPU @ 1.80GHz   2.00 GHz，16G memory，WSL下进行测试,采用输入：（64,128,128)，64个3x3的kernel进行测试
 </br>
 ![avatar](https://github.com/muzhailong/intel_test/raw/master/imgs/1.jpg?raw=true)
