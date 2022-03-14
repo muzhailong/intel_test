@@ -1,10 +1,16 @@
-objects = component.o layers.o main.o
+main_objects = component.o layers.o main.o
+test_objects = component.o layers.o test.o
+
 CXX = g++
-obj = main
 CFLAGS = -fopenmp
 
-main:$(objects)
-	$(CXX) -o $(obj) $(objects) $(CFLAGS)
+all:main test
+
+main:$(main_objects)
+	$(CXX) -o $@ $(main_objects) $(CFLAGS)
+
+test:$(test_objects)
+	$(CXX) -o $@ $(test_objects) $(CFLAGS)
 
 component.o : component.h
 	$(CXX) -c component.cpp $(CFLAGS)
@@ -12,7 +18,9 @@ layers.o : component.h layers.h
 	$(CXX) -c component.cpp layers.cpp $(CFLAGS)
 main.o : component.h layers.h
 	$(CXX) -c component.cpp layers.cpp main.cpp $(CFLAGS)
+test.o : component.h layers.h
+	$(CXX) -c component.cpp layers.cpp test.cpp $(CFLAGS)
 
 .PHONY:clean
 clean :
-	-rm main $(objects)
+	-rm main test *.o

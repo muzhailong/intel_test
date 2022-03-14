@@ -50,6 +50,7 @@ class Conv1D:public Layer{};
 class Conv2D:public Layer{
 public:
     Conv2D(size_t units,Dim kernel_size,size_t stride =1,size_t padding=0,string name="Conv2D");
+    Conv2D(vector<shared_ptr<Tensor>>kernels,size_t stride =1,size_t padding=0,string name="Conv2D");
     shared_ptr<Tensor>forward(shared_ptr<Tensor>);
     shared_ptr<Tensor>backward(shared_ptr<Tensor>){};
 protected:

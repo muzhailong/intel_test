@@ -48,8 +48,9 @@ BatchNorm2D::BatchNorm2D(Dim input_dims,string name,float eps)
     global_mean= F::zero_tensor(input_dims,DType::Float32);
     global_std= F::zero_tensor(input_dims,DType::Float32);
 
+    //为了方便测试，这个地方直接采用0/1值
     scale= F::one_tensor(input_dims,DType::Float32);
-    shift= F::randn_tensor(input_dims);
+    shift= F::zero_tensor(input_dims);
 }
 shared_ptr<Tensor> BatchNorm2D::forward(shared_ptr<Tensor> input){
     auto ret=input->like_tensor(true);
@@ -95,6 +96,30 @@ Conv2D::Conv2D(size_t units,Dim kernel_size,size_t stride,size_t padding,string 
         kernels.push_back( F::randn_tensor(kernel_size));
     }
 }
+
+Conv2D::Conv2D(
+    vector<shared_ptr<Tensor>>kernels,
+    size_t stride,
+    size_t padding,
+    string name
+    ):Layer(name),padding(padding),stride(stride){
+
+    if(kernels.size()<=0){
+        throw "kernels is empty error!!!";
+    }
+    for(int i=1;i<kernels.size();++i){
+        if(kernels[i]->dim!=kernels[i-1]->dim){
+            throw "kernel size is not equal error !!!";
+        }
+    }
+    kernel_size=Dim(kernels[0]->dim);
+    for(auto p:kernels){
+        this->kernels.push_back(p);
+    }
+    units=kernels.size();
+}
+
+
 shared_ptr<Tensor> Conv2D::forward(shared_ptr<Tensor>input){
     if(input->dim.size()!=3){
         throw "input tensor shape is Error!!!";
@@ -136,9 +161,10 @@ shared_ptr<Tensor> Conv2D::forward(shared_ptr<Tensor>input){
                         if(p_ci+kj<0 || p_ci+kj>=width){
                             continue;
                         }
-                        sm+=((float*)kernels[k]->data)[ki*kernel_width+kj]*data[(p_ri+ki)*width+p_ci+kj];
+                        sm+=((float*)kernels[k]->data)[ki*kernel_width+kj]*data[b*height*width+(p_ri+ki)*width+p_ci+kj];
                     }
                 }
+                // cout<<"("<<b<<","<<k<<","<<i/new_width<<","<<i%new_width<<"):"<<sm/(kernel_width*kernel_height)<<endl;
                 buff[b*units*new_height*new_width+k*new_height*new_width+i]=sm/(kernel_width*kernel_height);
             }
         }

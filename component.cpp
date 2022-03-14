@@ -1,9 +1,25 @@
 #include "component.h"
 using namespace std;
-size_t Dim::size(){
+
+ Dim::Dim(size_t d0,size_t d1,size_t d2,size_t d3){
+    if(d0>0){
+        dims.push_back(d0);
+    }
+    if(d1>0){
+        dims.push_back(d1);
+    }
+    if(d2>0){
+        dims.push_back(d2);
+    }
+    if(d3>0){
+        dims.push_back(d3);
+    }
+}
+
+size_t Dim::size()const{
     return dims.size();
 }
-size_t Dim::elements_size(){
+size_t Dim::elements_size()const{
     size_t ret=1;
     for(int t:dims){
         ret*=t;
@@ -11,8 +27,23 @@ size_t Dim::elements_size(){
     return ret;
 }
 
-vector<size_t>Dim::shape(){
+vector<size_t>Dim::shape()const{
     return dims;
+}
+bool Dim::operator==(const Dim& other){
+    if(other.size()!=size()){
+        return false;
+    }
+
+    for(int i=0;i<size();++i){
+        if(dims[i]!=other.shape()[i]){
+            return false;
+        }        
+    }
+    return true;
+}
+bool Dim::operator!=(const Dim& other){
+    return !((*this)==other);
 }
 
 Tensor::Tensor(void*buff,DType dtype,Dim dim,bool inplace):dtype(dtype),dim(dim){

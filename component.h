@@ -21,24 +21,13 @@ class Dim{
 private:
     vector<size_t>dims;
 public:
-    Dim();
-    Dim(size_t d0,size_t d1=0,size_t d2=0,size_t d3=0){
-        if(d0>0){
-            dims.push_back(d0);
-        }
-        if(d1>0){
-            dims.push_back(d1);
-        }
-        if(d2>0){
-            dims.push_back(d2);
-        }
-        if(d3>0){
-            dims.push_back(d3);
-        }
-    }
-    size_t size();
-    vector<size_t>shape();
-    size_t elements_size();
+    Dim(){};
+    Dim(size_t d0,size_t d1=0,size_t d2=0,size_t d3=0);
+    size_t size()const;
+    vector<size_t>shape()const;
+    size_t elements_size()const;
+    bool operator==(const Dim&);
+    bool operator!=(const Dim&);
 };
 
 class Tensor{
